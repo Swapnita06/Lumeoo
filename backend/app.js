@@ -19,7 +19,7 @@ const connectWithdb=async()=>{
 connectWithdb();
 
 app.use(bodyParser.json())
-app.use(fileUpload.json({
+app.use(fileUpload({
     useTempFiles : true,
     tempFileDir : '/tmp/'
 }));
