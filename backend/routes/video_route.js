@@ -100,4 +100,33 @@ Router.put('/:videoId',checkAuth,async(req,res)=>{
     }
 })
 
+//delete the api
+Router.delete('/:videoId',checkAuth,async(req,res)=>{
+    try{
+        const verifiedUser= await jwt.verify(req.headers.authorization.split(" ")[1],'swapnita singh')
+         console.log(verifiedUser)
+
+        const video = await Video.findById(req.params.videoId)
+        if(video.user_id==verifiedUser._id){
+            await cloudinary.uploader.destroy(video.videoId,{resource_type:'video'})
+            await cloudinary.uploader.destroy(video.thumbnailId)
+           const deletedResponse = await  Video.findByIdAndDelete(req.params.videoId)
+           res.status(200).json({
+            deletedResponse:deletedResponse
+           })
+        }
+        else{
+            return res.status(500).json({
+                error:'you can not delete bro!'
+            })
+        }
+    }
+catch(err){
+    console.log(err);
+    res.status(500).json({
+        error:err
+    })
+}
+})
+
 module.exports = Router
