@@ -129,4 +129,34 @@ catch(err){
 }
 })
 
+
+//like the video
+Router.put('/like/:videoId',checkAuth,async(req,res)=>{
+    try{
+        const verifiedUser= await jwt.verify(req.headers.authorization.split(" ")[1],'swapnita singh')
+         console.log(verifiedUser)
+        const video =  await Video.findById(req.params.videoId)
+        console.log(video)
+        if(video.likedBy.includes(verifiedUser._id)){
+           return res.status(500).json({
+            error:'already liked'
+           })
+        }
+        video.like+=1;
+        video.likedBy.push(verifiedUser._id)
+        await video.save();
+        res.status(200).json({
+            msg:'liked'
+        })
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).json({
+            error:err
+        })
+    }
+})
+
+
+
 module.exports = Router
