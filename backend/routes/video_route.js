@@ -142,11 +142,55 @@ Router.put('/like/:videoId',checkAuth,async(req,res)=>{
             error:'already liked'
            })
         }
+
+        if(video.dislikedBy.includes(verifiedUser._id))
+        {
+            video.dislike-=1;
+            video.dislikedBy = video.dislikedBy.filter(userId=>userId.toString()!= verifiedUser._id)
+                
+        }
+
         video.like+=1;
         video.likedBy.push(verifiedUser._id)
         await video.save();
         res.status(200).json({
             msg:'liked'
+        })
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).json({
+            error:err
+        })
+    }
+})
+
+
+//dislike the video
+Router.put('/dislike/:videoId',checkAuth,async(req,res)=>{
+    try{
+        const verifiedUser= await jwt.verify(req.headers.authorization.split(" ")[1],'swapnita singh')
+         console.log(verifiedUser)
+        const video =  await Video.findById(req.params.videoId)
+        console.log(video)
+        if(video.dislikedBy.includes(verifiedUser._id)){
+           return res.status(500).json({
+            error:'already disliked'
+           })
+        }
+
+        if(video.likedBy.includes(verifiedUser._id))
+            {
+                video.like-=1;
+                video.likedBy = video.likedBy.filter(userId=>userId.toString()!= verifiedUser._id)
+                    
+            }
+            
+        video.dislike+=1;
+        video.dislikedBy.push(verifiedUser._id)
+        await video.save();
+        res.status(200).json({
+            msg:'disliked'
         })
     }
     catch(err){
