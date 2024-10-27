@@ -6,6 +6,7 @@ require('dotenv').config()
 const User = require('../models/User');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const checkAuth = require('../middleware/checkAuth');
 
 
 cloudinary.config({ 
@@ -105,6 +106,71 @@ res.status(200).json({
             error:'something is wrong!'
         })
     }
+})
+
+
+//subscribe api
+
+Router.put('/subscribe/:userBID',checkAuth,async(req,res)=>{
+try{
+    const userA = await jwt.verify(req.headers.authorization.split(" ")[1],'swapnita singh')
+console.log(userA)
+const userB = await User.findById(req.params.userBID)
+console.log(userB);
+if(userB.subscribedBy.includes(userA._id)){
+    return res.status(500).json({
+    error:'already subscribed'
+})
+
+}
+     userB.subscribers+=1;
+   userB.subscribedBy.push(userA._id)
+   await userB.save();
+   const userAFullinfo = await User.findById(userA._id)
+   userAFullinfo.subscribedChannels.push(userB._id)
+   userAFullinfo.save();
+   res.status(200).json({
+    msg:'subscribed'
+   })
+
+}
+catch(err){
+    console.log(err)
+    res.status(500).json({
+         error:err
+    })
+}
+
+})
+
+
+// api to unsubscribe the channel 
+Router.put('/unsubscribe/:userBid',checkAuth,async(req,res)=>{
+      try{
+        const userA = await jwt.verify(req.headers.authorization.split(" ")[1],'swapnita singh')
+       const userB = await User.findById(req.params.userBid)
+    //    console.log(userA)
+    //    console.log(userB)
+       if(userB.subscribedBy.includes(userA._id)){
+userB.subscribers -= 1
+ userB.subscribedBy = userB.subscribedBy.filter(userId=>userId.toString()!= userA._id)
+ await userB.save();
+ userAFullinfo = await User.findById(userA._id)
+ userAFullinfo.subscribedChannels= userAFullinfo.subscribedChannels.filter(userId=>userId.toString()!= userB._id)
+ await userAFullinfo.save();
+
+ res.status(200).json({
+    msg:'unsubscribed'
+ })
+       }else{
+        return res.status(500).json({
+error:'aapne subscribe hi nhi kiya he'
+        })
+       }
+      } 
+      catch(err){
+console.log(err)
+      }
 })
 
 module.exports = Router
