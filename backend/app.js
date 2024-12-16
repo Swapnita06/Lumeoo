@@ -7,6 +7,8 @@ const videoRoute = require('./routes/video_route')
 const commentRoute = require('./routes/comment_route')
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
+const cors = require('cors')
+
 
 const connectWithdb=async()=>{
     try{
@@ -20,6 +22,7 @@ const connectWithdb=async()=>{
 
 connectWithdb();
 
+app.use(cors())
 app.use(bodyParser.json())
 app.use(fileUpload({
     useTempFiles : true,
