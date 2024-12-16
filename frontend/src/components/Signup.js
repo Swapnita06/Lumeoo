@@ -1,5 +1,9 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../components/Signup.css'
+import axios  from 'axios'
+import { toast } from 'react-toastify';
+ 
 const Signup = ()=>{
     const [channelName,setChannelName] = useState('');
     const [email,setEmail] = useState('');
@@ -7,7 +11,8 @@ const Signup = ()=>{
     const [phone,setPhone]=useState('');
     const [logo,setLogo] = useState(null);
     const [imageUrl,setImageUrl]= useState('');
-
+    const [isLoading,setLoading]= useState(false);
+    const navigate= useNavigate();
 
     const fileHandler=(e)=>{
         console.log(e.target.files[0]);
@@ -17,6 +22,7 @@ const Signup = ()=>{
 
     const submitHandler=(e)=>{
         e.preventDefault();
+        setLoading(true);
         const formData =new FormData();
         formData.append('channelName',channelName)
         formData.append('email',email)
@@ -26,10 +32,15 @@ const Signup = ()=>{
 
         axios.post('http://localhost:3000/user/signup',formData)
         .then(res=>{
-            console.log(res)
+            setLoading(false);
+            navigate('/login')
+            console.log(res.data)
+            toast.success("Registered Successfully!")
         })
         .catch(err=>{
+            setLoading(false);
             console.log(err)
+            toast.error(err.response.data.error)
         })
     }
 return(
@@ -45,8 +56,10 @@ return(
         <input required  onChange={(e)=>{setPassword(e.target.value)}} type='password' placeholder='Password' />
         <input required  onChange={(e)=>{setPhone(e.target.value)}} type='text' placeholder='Phone' />
         <input required  onChange={fileHandler} type='file' />
-        <img className='preview-img' alt='logo-image' src={imageUrl}/>
-        <button type='submit'>Submit</button>
+        {imageUrl && <img className='preview-img' alt='logo-image' src={imageUrl}/>}
+        <button type='submit'>{isLoading && <i class="fa-solid fa-spinner fa-spin-pulse"></i>}Submit</button>
+        <Link to = '/login' className='link' >Already registered?</Link>
+        
         </form>
       
     </div>
