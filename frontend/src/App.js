@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import Dashboard from './components/Dashboard/Dashboard'
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
@@ -15,6 +16,7 @@ function App() {
      <Route exact path="/" element={<Signup />}></Route>
       <Route exact path="/signup" element={<Signup/>}/>
       <Route exact path="/login" element={<Login/>}/>
+      <Route exact path="/dashboard" element={<Dashboard/>}></Route>
      </Routes>
      </BrowserRouter>
      <ToastContainer 

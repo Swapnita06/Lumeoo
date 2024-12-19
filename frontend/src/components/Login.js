@@ -24,6 +24,7 @@ const Login = ()=>{
             console.log(res.data)
             localStorage.setItem('token',res.data.token)
             localStorage.setItem('userId',res.data._id)
+            navigate('/dashboard')
             toast.success("Welcome to Lumeo!")
         })
         .catch(err=>{
