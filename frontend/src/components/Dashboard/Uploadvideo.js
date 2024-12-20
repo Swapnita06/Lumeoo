@@ -26,7 +26,7 @@ const submithandler = (e)=>{
   e.preventDefault();
   setLoading(true)
   console.log(title,description,tags,category,video,thumbnail)
-const formData = new formData()
+const formData = new FormData()
 formData.append('title',title)
 formData.append('description',description)
 formData.append('category',category)
