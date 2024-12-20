@@ -36,7 +36,8 @@ formData.append('thumbnail',thumbnail)
 
 axios.post('http://localhost:3000/video/upload',formData,{
   headers:{
-    Authorization:'Bearer' +localStorage.getItem('token')
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
+   
   }
 })
 .then(res=>{
@@ -71,7 +72,7 @@ axios.post('http://localhost:3000/video/upload',formData,{
         <label>thumbnail</label>
         <input onChange={thumbnailhandler} type='file'/>
         {imageUrl && <img className='thumbnail' alt='thumbnail'src = {imageUrl}/>}
-        <button type='submit'>{isLoading && <i class="fa-solid fa-spinner fa-spin-pulse"></i>}Upload</button>
+        <button type='submit'>{isLoading && <i className="fa-solid fa-spinner fa-spin-pulse"></i>}Upload</button>
       </form>
     </div>
   )
