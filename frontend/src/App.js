@@ -6,6 +6,10 @@ import Dashboard from './components/Dashboard/Dashboard'
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
+import Home from './components/Dashboard/Home';
+import Myvideo from './components/Dashboard/Myvideo';
+import Uploadvideo from './components/Dashboard/Uploadvideo';
+
 
 function App() {
   return (
@@ -16,7 +20,12 @@ function App() {
      <Route exact path="/" element={<Signup />}></Route>
       <Route exact path="/signup" element={<Signup/>}/>
       <Route exact path="/login" element={<Login/>}/>
-      <Route exact path="/dashboard" element={<Dashboard/>}></Route>
+      <Route exact path="/dashboard" element={<Dashboard/>}>
+      <Route path='' element={<Home/>}/>
+      <Route path="home" element={<Home/>}/>
+      <Route path="myvideo" element={<Myvideo/>}/>
+      <Route path="uploadvideo" element={<Uploadvideo/>}/>
+      </Route>
      </Routes>
      </BrowserRouter>
      <ToastContainer 
