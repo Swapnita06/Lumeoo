@@ -6,6 +6,25 @@ const checkAuth = require('../middleware/checkAuth')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 
+Router.get('/own-video',checkAuth,async(req,res)=>{
+    try{
+        const token = req.headers.authorization.split(" ")[1]
+        const user = await jwt.verify(token,'swapnita singh')
+        console.log(user)
+        const videos = await Video.find({user_id:user._id}).populate('user_id','channelName logoUrl email')
+        res.status(200).json({
+            videos:videos
+        })
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).json({
+            error:err
+        })
+    }
+})
+
+
 Router.post('/upload',checkAuth,async(req,res)=>{
 try{
     const token = req.headers.authorization.split(" ")[1]
