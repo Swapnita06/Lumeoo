@@ -26,7 +26,7 @@ const Login = ()=>{
             localStorage.setItem('userId',res.data._id)
             localStorage.setItem('channelName',res.data.channelName)
             localStorage.setItem('logoUrl',res.data.logoUrl)
-            navigate('/dashboard')
+            navigate('/allvideos')
             toast.success("Welcome to Lumeo!")
         })
         .catch(err=>{

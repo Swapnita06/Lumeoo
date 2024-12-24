@@ -1,0 +1,172 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Main container */
+  .main-container {
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Header styling */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #212121;
+    padding: 10px 20px;
+    color: white;
+  }
+  
+  .header .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff0000;
+  }
+  
+  .header .search-bar input {
+    width: 500px;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .header .user-icon img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  /* Sidebar styling */
+  .content-container {
+    display: flex;
+    padding: 20px;
+  }
+  
+  .sidebar {
+    width: 250px;
+    background-color: #f5f5f5;
+    padding: 20px;
+    margin-right: 20px;
+  }
+  
+  .sidebar h3 {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+  }
+  
+  .sidebar ul li {
+    margin: 10px 0;
+    cursor: pointer;
+  }
+  
+  .sidebar ul li:hover {
+    color: #ff0000;
+  }
+  
+  /* Video Grid Styling */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .video-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .video-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .thumbnail {
+    width: 100%;
+    height: auto;
+  }
+  
+  .video-info {
+    padding: 10px;
+  }
+  
+  .video-info .title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .video-info .views {
+    font-size: 14px;
+    color: #777;
+  }
+  
+  .video-info .date {
+    font-size: 12px;
+    color: #aaa;
+  }
+  
+  .video-info .likes {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+/* Add styles for the like/dislike buttons */
+.like-button,
+.dislike-button {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.like-button.clicked {
+  background-color: #4caf50; /* Green for like */
+  transform: scale(1.1); /* Slightly enlarge the button */
+  color: white;
+  border: none;
+}
+
+.dislike-button.clicked {
+  background-color: #f44336; /* Red for dislike */
+  transform: scale(1.1); /* Slightly enlarge the button */
+  color: white;
+  border: none;
+}
+
+.like-button.disabled,
+.dislike-button.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+
+  /* Mobile Responsiveness */
+  @media (max-width: 768px) {
+    .header .search-bar input {
+      width: 300px;
+    }
+  
+    .content-container {
+      flex-direction: column;
+    }
+  
+    .sidebar {
+      width: 100%;
+      margin-right: 0;
+    }
+  
+    .video-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './uploadvideo.css'
+import {useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
@@ -12,6 +13,8 @@ const Uploadvideo = () => {
   const [thumbnail,setThumbnail] = useState(null)
   const [isLoading,setLoading] = useState(false)
   const [imageUrl,setImageUrl] = useState(null)
+  const navigate = useNavigate();
+
 
 const videohandler=(e)=>{
  setVideo(e.target.files[0])
@@ -44,6 +47,7 @@ axios.post('http://localhost:3000/video/upload',formData,{
  setLoading(false)
  console.log(res.data)
  toast("Video is uploaded")
+ navigate('/dashboard/Myvideo')
 })
 .catch(err=>{
   console.log(err)

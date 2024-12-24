@@ -6,6 +6,20 @@ const checkAuth = require('../middleware/checkAuth')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 
+
+Router.get('/allvideos', checkAuth, async (req, res) => {
+    try {
+      const userId = req.user._id;  // Assuming you have the user information from the token
+      const videos = await Video.find({ uploadedBy: { $ne: userId } }); // Exclude videos uploaded by the current user
+      res.status(200).json({ videos });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Server error' });
+    }
+  });
+  
+
+
 Router.get('/own-video',checkAuth,async(req,res)=>{
     try{
         const token = req.headers.authorization.split(" ")[1]
@@ -173,7 +187,10 @@ Router.put('/like/:videoId',checkAuth,async(req,res)=>{
         video.likedBy.push(verifiedUser._id)
         await video.save();
         res.status(200).json({
-            msg:'liked'
+            msg:'liked',
+            videoId: video._id,
+    likes: video.like,
+    dislikes: video.dislike
         })
     }
     catch(err){
@@ -209,7 +226,10 @@ Router.put('/dislike/:videoId',checkAuth,async(req,res)=>{
         video.dislikedBy.push(verifiedUser._id)
         await video.save();
         res.status(200).json({
-            msg:'disliked'
+            msg:'disliked',
+            videoId: video._id,
+    likes: video.like,
+    dislikes: video.dislike
         })
     }
     catch(err){

@@ -1,0 +1,31 @@
+/* playvideo.css */
+.play-video-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+    background-color: black;
+  }
+  
+  .video-player {
+    margin-bottom: 20px;
+    background-color: rgb(49, 47, 47);
+  }
+  
+  video {
+    width: 100%;
+    height: 50vh;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .video-details {
+    background-color: #424040;
+    padding: 15px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(24, 22, 22, 0.1);
+  }
+  
+  .video-details h2 {
+    margin-top: 0;
+  }
+  

@@ -9,6 +9,8 @@ import {BrowserRouter,Routes,Route} from 'react-router-dom';
 import Home from './components/Dashboard/Home';
 import Myvideo from './components/Dashboard/Myvideo';
 import Uploadvideo from './components/Dashboard/Uploadvideo';
+import PlayVideo from './components/PlayVideo';
+import AllVideos from './components/Allvideo';
 
 
 function App() {
@@ -20,8 +22,10 @@ function App() {
      <Route exact path="/" element={<Signup />}></Route>
       <Route exact path="/signup" element={<Signup/>}/>
       <Route exact path="/login" element={<Login/>}/>
+      <Route exact path="/playvideo" element={<PlayVideo/>}/>
+      <Route path="/allvideos" element={<AllVideos />} />
       <Route exact path="/dashboard" element={<Dashboard/>}>
-      <Route path='' element={<Home/>}/>
+      <Route path='' element={<Myvideo/>}/>
       <Route path="home" element={<Home/>}/>
       <Route path="myvideo" element={<Myvideo/>}/>
       <Route path="uploadvideo" element={<Uploadvideo/>}/>
