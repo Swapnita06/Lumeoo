@@ -16,7 +16,7 @@ useEffect(()=>{
 },[])
 
 const getOwnVideo=()=>{
-  axios.get('http://localhost:3000/video/own-video',{
+  axios.get('http://localhost:5000/video/own-video',{
     headers:{
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     }
@@ -38,7 +38,7 @@ const handleEditClick = (video) => {
 const handleEditSubmit = (e) => {
   e.preventDefault();
   axios
-    .put(`http://localhost:3000/video/${currentVideo._id}`, currentVideo, {
+    .put(`http://localhost:5000/video/update/${currentVideo._id}`, currentVideo, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
@@ -68,7 +68,7 @@ const deleteVideo = (videoId) => {
   const confirmDelete = window.confirm('Are you sure you want to delete this video?');
   if (confirmDelete) {
     axios
-      .delete(`http://localhost:3000/video/${videoId}`, {
+      .delete(`http://localhost:5000/video/${videoId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

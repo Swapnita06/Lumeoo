@@ -115,86 +115,111 @@ res.status(200).json({
 
 //subscribe api
 
-Router.put('/subscribe/:userBID',checkAuth,async(req,res)=>{
-try{
-    const userA = await jwt.verify(req.headers.authorization.split(" ")[1],'swapnita singh')
-console.log(userA)
-const userB = await User.findById(req.params.userBID)
-console.log(userB);
-if(userB.subscribedBy.includes(userA._id)){
-    return res.status(500).json({
-    error:'already subscribed'
-})
-
-}
-     userB.subscribers+=1;
-   userB.subscribedBy.push(userA._id)
-   await userB.save();
-   const userAFullinfo = await User.findById(userA._id)
-   userAFullinfo.subscribedChannels.push(userB._id)
-   userAFullinfo.save();
-   res.status(200).json({
-    msg:'subscribed'
-   })
-
-}
-catch(err){
-    console.log(err)
-    res.status(500).json({
-         error:err
-    })
-}
-
-})
-
-
-// api to unsubscribe the channel 
-Router.put('/unsubscribe/:userBid',checkAuth,async(req,res)=>{
-      try{
-        const userA = await jwt.verify(req.headers.authorization.split(" ")[1],'swapnita singh')
-       const userB = await User.findById(req.params.userBid)
-    //    console.log(userA)
-    //    console.log(userB)
-       if(userB.subscribedBy.includes(userA._id)){
-userB.subscribers -= 1
- userB.subscribedBy = userB.subscribedBy.filter(userId=>userId.toString()!= userA._id)
- await userB.save();
- userAFullinfo = await User.findById(userA._id)
- userAFullinfo.subscribedChannels= userAFullinfo.subscribedChannels.filter(userId=>userId.toString()!= userB._id)
- await userAFullinfo.save();
-
- res.status(200).json({
-    msg:'unsubscribed'
- })
-       }else{
-        return res.status(500).json({
-error:'aapne subscribe hi nhi kiya he'
-        })
-       }
-      } 
-      catch(err){
-console.log(err)
-      }
-})
-
-// API route to check if a user is subscribed to a channel
-Router.get('/check-subscription/:userBID', checkAuth, async (req, res) => {
+// Subscribe to a channel
+Router.put('/subscribe/:channelId', checkAuth, async (req, res) => {
     try {
-      const userA = await jwt.verify(req.headers.authorization.split(" ")[1], 'swapnita singh');
-      const userB = await User.findById(req.params.userBID);
-  
-      if (!userB) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-  
-      // Check if userA is subscribed to userB's channel
-      const isSubscribed = userB.subscribedBy.includes(userA._id);
-      res.status(200).json({ isSubscribed });
+        const subscriberId = req.userData._id; // From checkAuth middleware
+        const channelId = req.params.channelId;
+
+ if (!mongoose.Types.ObjectId.isValid(subscriberId) || 
+            !mongoose.Types.ObjectId.isValid(channelId)) {
+            return res.status(400).json({ error: 'Invalid ID format' });
+        }
+
+        // Prevent self-subscription
+        if (subscriberId.toString() === channelId) {
+            return res.status(400).json({ error: "You can't subscribe to yourself" });
+        }
+
+        const channel = await User.findById(channelId);
+        if (!channel) {
+            return res.status(404).json({ error: 'Channel not found' });
+        }
+
+        // Check if already subscribed
+        if (channel.subscribedBy.includes(subscriberId)) {
+            return res.status(400).json({ error: 'Already subscribed' });
+        }
+
+        // Update channel's subscribers
+        channel.subscribers += 1;
+        channel.subscribedBy.push(subscriberId);
+        await channel.save();
+
+        // Update user's subscribed channels
+        const user = await User.findById(subscriberId);
+        user.subscribedChannels.push(new mongoose.Types.ObjectId(channelId));
+
+       // user.subscribedChannels.push(channelId);
+        await user.save();
+
+        res.status(200).json({ 
+            message: 'Subscribed successfully',
+            subscribers: channel.subscribers,
+            isSubscribed: true
+        });
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Failed to check subscription status' });
+        console.error(err);
+        res.status(500).json({ error: 'Subscription failed',
+            details: err.message  });
     }
-  });
+});
+
+// Unsubscribe from a channel
+Router.put('/unsubscribe/:channelId', checkAuth, async (req, res) => {
+    try {
+        const subscriberId = req.userData._id;
+        const channelId = req.params.channelId;
+
+        const channel = await User.findById(channelId);
+        if (!channel) {
+            return res.status(404).json({ error: 'Channel not found' });
+        }
+
+        // Check if actually subscribed
+        if (!channel.subscribedBy.includes(subscriberId)) {
+            return res.status(400).json({ error: 'Not subscribed' });
+        }
+
+        // Update channel's subscribers
+        channel.subscribers -= 1;
+        channel.subscribedBy = channel.subscribedBy.filter(id => id.toString() !== subscriberId.toString());
+        await channel.save();
+
+        // Update user's subscribed channels
+        const user = await User.findById(subscriberId);
+        user.subscribedChannels = user.subscribedChannels.filter(id => id.toString() !== channelId.toString());
+        await user.save();
+
+        res.status(200).json({ 
+            message: 'Unsubscribed successfully',
+            subscribers: channel.subscribers,
+            isSubscribed: false
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Unsubscription failed' });
+    }
+});
+
+// Check subscription status
+Router.get('/check-subscription/:channelId', checkAuth, async (req, res) => {
+    try {
+        const userId = req.userData._id;
+        const channelId = req.params.channelId;
+
+        const channel = await User.findById(channelId);
+        if (!channel) {
+            return res.status(404).json({ error: 'Channel not found' });
+        }
+
+        const isSubscribed = channel.subscribedBy.some(id => id.toString() === userId.toString());
+        res.status(200).json({ isSubscribed });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to check subscription status' });
+    }
+});
   
 
 module.exports = Router

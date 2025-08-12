@@ -4,7 +4,7 @@ import { Link, Outlet, useLocation,useNavigate } from 'react-router-dom'
 
 
 const Dashboard = () => {
-  const loction = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
 
 
@@ -26,9 +26,9 @@ const Dashboard = () => {
     <h2>{localStorage.getItem('channelName')}</h2>
 </div>
 <div className='menu-container'>
-            <Link  to="/allvideos" className={loction.pathname=='/dashboard/home'?'active-menu-link':'menu-link'} >Home</Link>
-            <Link to="/dashboard/myvideo" className={loction.pathname=='/dashboard/myvideo'?'active-menu-link':'menu-link'}  >My Videos</Link>
-            <Link to="/dashboard/uploadvideo" className={loction.pathname=='/dashboard/uploadvideo'?'active-menu-link':'menu-link'} >Upload Videos</Link>
+            <Link  to="/allvideos" className={location.pathname=='/dashboard/home'?'active-menu-link':'menu-link'} >Home</Link>
+            <Link to="/dashboard/myvideo" className={location.pathname=='/dashboard/myvideo'?'active-menu-link':'menu-link'}  >My Videos</Link>
+            <Link to="/dashboard/uploadvideo" className={location.pathname=='/dashboard/uploadvideo'?'active-menu-link':'menu-link'} >Upload Videos</Link>
  <Link to="/login" className='menu-link' onClick={handleLogout}   >Logout</Link>
             
          </div>

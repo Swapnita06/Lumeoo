@@ -29,3 +29,33 @@
     margin-top: 0;
   }
   
+  /* Subscribe Button */
+.subscribe-btn {
+  padding: 10px 20px;
+  background-color: #ff5733;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.subscribe-btn:hover {
+  background-color: #e03e1a;
+}
+
+/* Share Button */
+.share-btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.share-btn:hover {
+  background-color: #0056b3;
+}
+
+  

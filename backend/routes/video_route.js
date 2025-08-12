@@ -7,36 +7,68 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 
 
+// Router.get('/allvideos', checkAuth, async (req, res) => {
+//     try {
+//       const userId = req.user._id;  // Assuming you have the user information from the token
+//       const videos = await Video.find({ uploadedBy: { $ne: userId } }); // Exclude videos uploaded by the current user
+//       res.status(200).json({ videos });
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).json({ error: 'Server error' });
+//     }
+//   });
+  
+
+
+// Router.get('/own-video',checkAuth,async(req,res)=>{
+//     try{
+//         const token = req.headers.authorization.split(" ")[1]
+//         const user = await jwt.verify(token,'swapnita singh')
+//         console.log(user)
+//         const videos = await Video.find({user_id:user._id}).populate('user_id','channelName logoUrl email')
+//         res.status(200).json({
+//             videos:videos
+//         })
+//     }
+//     catch(err){
+//         console.log(err)
+//         res.status(500).json({
+//             error:err
+//         })
+//     }
+// })
+
 Router.get('/allvideos', checkAuth, async (req, res) => {
     try {
-      const userId = req.user._id;  // Assuming you have the user information from the token
-      const videos = await Video.find({ uploadedBy: { $ne: userId } }); // Exclude videos uploaded by the current user
+      // Use req.userData instead of req.user
+      const userId = req.userData._id;
+      
+      // Find videos not uploaded by current user
+      const videos = await Video.find({ user_id: { $ne: userId } })
+        .populate('user_id', 'channelName logoUrl email');
+      
       res.status(200).json({ videos });
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'Server error' });
     }
-  });
-  
+});
 
-
-Router.get('/own-video',checkAuth,async(req,res)=>{
-    try{
-        const token = req.headers.authorization.split(" ")[1]
-        const user = await jwt.verify(token,'swapnita singh')
-        console.log(user)
-        const videos = await Video.find({user_id:user._id}).populate('user_id','channelName logoUrl email')
+Router.get('/own-video', checkAuth, async (req, res) => {
+    try {
+        // Use req.userData instead of decoding token again
+        const videos = await Video.find({ user_id: req.userData._id })
+                               .populate('user_id', 'channelName logoUrl email');
         res.status(200).json({
-            videos:videos
-        })
-    }
-    catch(err){
-        console.log(err)
+            videos: videos
+        });
+    } catch (err) {
+        console.log(err);
         res.status(500).json({
-            error:err
-        })
+            error: err
+        });
     }
-})
+});
 
 
 Router.post('/upload',checkAuth,async(req,res)=>{
@@ -78,60 +110,62 @@ catch(err){
 })
 
 //update video details
-Router.put('/:videoId',checkAuth,async(req,res)=>{
-    try{
-       const verifiedUser = await jwt.verify(req.headers.authorization.split(" ")[1],'swapnita singh')
-      const video = await Video.findById(req.params.videoId)
-      console.log(video)
-
-      if(video.user_id==verifiedUser._id){
-        if(req.files){
-            //update thumbnail and text data
-            await cloudinary.uploader.destroy(video.thumbnailId)
-            const updatedThumbnail = await cloudinary.uploader.upload(req.files.thumbnail.tempFilePath)
-
-            const updatedData= {
-                title:req.body.title,
-        description:req.body.description,
-        category:req.body.category,
-        tags:req.body.tags.split(","),
-        thumbnailUrl:updatedThumbnail.secure_url,
-        thumbnailId:updatedThumbnail.public_id,
-            }
-           const updatedVideoDetail= await Video.findByIdAndUpdate(req.params.videoId,updatedData,{ new: true });
-           console.log("Updated Video Detail:", updatedVideoDetail);
-           res.status(200).json({
-            updatedVideo:updatedVideoDetail
-           });
-        }else{
-           // const updatedThumbnail = await cloudinary.uploader.upload(req.files.thumbnail.tempFilePath)
-            const updatedData= {
-                title:req.body.title,
-        description:req.body.description,
-        category:req.body.category,
-        tags:req.body.tags.split(","),
-       
-            }
-
-           const updatedVideoDetail= await Video.findByIdAndUpdate(req.params.videoId,updatedData,{ new: true });
-           res.status(200).json({
-            updatedVideo:updatedVideoDetail
-        })
-    }
-
-      }else{
-        return res.status(500).json({
-            error:'you have no permission'
-        })
+Router.put('/update/:videoId', checkAuth, async (req, res) => {
+    try {
+      const verifiedUser = await jwt.verify(
+        req.headers.authorization.split(" ")[1],
+        'swapnita singh'
+      );
+      const video = await Video.findById(req.params.videoId);
+      console.log(video);
+  
+      if (video.user_id == verifiedUser._id) {
+        let updatedData = {
+          ...(req.body.title && { title: req.body.title }),
+          ...(req.body.description && { description: req.body.description }),
+          ...(req.body.category && { category: req.body.category }),
+          ...(typeof req.body.tags === 'string'
+            ? { tags: req.body.tags.split(',') }
+            : Array.isArray(req.body.tags)
+            ? { tags: req.body.tags }
+            : {}),
+        };
+  
+        if (req.files && req.files.thumbnail) {
+          await cloudinary.uploader.destroy(video.thumbnailId);
+          const updatedThumbnail = await cloudinary.uploader.upload(
+            req.files.thumbnail.tempFilePath
+          );
+          updatedData.thumbnailUrl = updatedThumbnail.secure_url;
+          updatedData.thumbnailId = updatedThumbnail.public_id;
+        }
+  
+        const updatedVideoDetail = await Video.findByIdAndUpdate(
+          req.params.videoId,
+          updatedData,
+          { new: true }
+        );
+  
+        console.log("Updated Video Detail:", updatedVideoDetail);
+        console.log("Body:", req.body);
+        console.log("Files:", req.files);
+  
+        res.status(200).json({
+          updatedVideo: updatedVideoDetail,
+        });
+      } else {
+        return res.status(403).json({
+          error: 'You have no permission',
+        });
       }
+    } catch (err) {
+      console.error("Update video error:", err?.message || err);
+      res.status(500).json({
+        error: err?.message || "Internal Server Error",
+      });
     }
-    catch(err){
-        console.log(err);
-        res.status(500).json({
-            error:err
-        })
-    }
-})
+  });
+  
 
 //delete the api
 Router.delete('/:videoId',checkAuth,async(req,res)=>{
