@@ -19,14 +19,16 @@ cloudinary.config({
 //this is for signup
 Router.post('/signup', async(req,res)=>{
     try{
-        const users =  await User.find({email:req.body.email})
-        if(users.length>0)
-        {
-            return res.status(500).json({
-                error:'email already exists!'
-             
-            })
+if (!req.body.email || !req.body.password || !req.body.channelName || !req.files?.logo) {
+            return res.status(400).json({ error: 'Missing required fields' });
         }
+
+        // Check if email exists
+        const existingUser = await User.findOne({ email: req.body.email });
+        if (existingUser) {
+            return res.status(409).json({ error: 'Email already exists' });
+        }
+
        const hashCode= await bcrypt.hash(req.body.password,10) 
        const uploadedImg = await cloudinary.uploader.upload(req.files.logo.tempFilePath)
       
@@ -41,9 +43,11 @@ Router.post('/signup', async(req,res)=>{
        })
 
        const user = await newUser.save();
-       res.status(200).json({
-        newUser:user
-       })
+    //    res.status(200).json({
+    //     newUser:user
+    //    })
+         res.status(201).json(user);
+
 
     }catch(err){
         console.log(err)
@@ -172,5 +176,25 @@ error:'aapne subscribe hi nhi kiya he'
 console.log(err)
       }
 })
+
+// API route to check if a user is subscribed to a channel
+Router.get('/check-subscription/:userBID', checkAuth, async (req, res) => {
+    try {
+      const userA = await jwt.verify(req.headers.authorization.split(" ")[1], 'swapnita singh');
+      const userB = await User.findById(req.params.userBID);
+  
+      if (!userB) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Check if userA is subscribed to userB's channel
+      const isSubscribed = userB.subscribedBy.includes(userA._id);
+      res.status(200).json({ isSubscribed });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to check subscription status' });
+    }
+  });
+  
 
 module.exports = Router
