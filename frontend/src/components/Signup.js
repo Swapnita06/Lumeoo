@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Camera, Loader2 } from 'lucide-react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { Camera, Loader2, Eye } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function App() {
   const [channelName, setChannelName] = useState('');
@@ -20,7 +20,7 @@ const navigate = useNavigate();
     }
   };
 
-  const submitHandler = async (e) => {
+    const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
    try {
@@ -49,33 +49,33 @@ const navigate = useNavigate();
 };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-purple-950 to-black flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-orange-500 mb-2">PlayZoon</h1>
-          <p className="text-gray-400">Create your channel today</p>
+          <h1 className="text-5xl font-bold text-white mb-4">PlayZoon</h1>
+          <p className="text-gray-400 text-lg">Create your channel today</p>
         </div>
 
         {/* Form */}
-        <form onSubmit={submitHandler} className="space-y-6 bg-gray-900 rounded-xl p-8 shadow-2xl">
+        <div className="space-y-6 bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl">
           {/* Logo Preview */}
-          <div className="flex justify-center">
+          <div className="flex justify-center mb-6">
             {imageUrl ? (
               <img 
                 src={imageUrl} 
                 alt="Channel logo" 
-                className="w-32 h-32 rounded-full object-cover border-4 border-orange-500"
+                className="w-28 h-28 rounded-2xl object-cover border-2 border-purple-400"
               />
             ) : (
-              <div className="w-32 h-32 rounded-full bg-gray-800 flex items-center justify-center border-4 border-orange-500">
-                <Camera className="w-12 h-12 text-orange-500" />
+              <div className="w-28 h-28 rounded-2xl bg-white/5 backdrop-blur-lg flex items-center justify-center border border-white/20 shadow-lg">
+                <Camera className="w-10 h-10 text-gray-300" />
               </div>
             )}
           </div>
 
           {/* File Input */}
-          <div className="relative">
+          <div className="relative mb-6">
             <input
               type="file"
               onChange={fileHandler}
@@ -85,57 +85,70 @@ const navigate = useNavigate();
             />
             <label
               htmlFor="logo-upload"
-              className="w-full py-3 px-4 text-center bg-gray-800 hover:bg-gray-700 text-white rounded-lg cursor-pointer transition duration-200 block"
+              className="w-full py-3 px-6 text-center bg-white/10 backdrop-blur-lg hover:bg-white/15 text-white rounded-xl cursor-pointer transition duration-300 block font-medium border border-white/20"
             >
-              Upload Channel Logo
+              Upload Logo
             </label>
           </div>
 
           {/* Text Inputs */}
           <div className="space-y-4">
-            <input
-              type="text"
-              placeholder="Channel Name"
-              value={channelName}
-              onChange={(e) => setChannelName(e.target.value)}
-              className="w-full bg-gray-800 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-200"
-              required
-            />
-            <input
-              type="email"
-              placeholder="Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-gray-800 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-200"
-              required
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-gray-800 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-200"
-              required
-            />
-            <input
-              type="tel"
-              placeholder="Phone Number"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full bg-gray-800 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-200"
-              required
-            />
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Channel Name"
+                value={channelName}
+                onChange={(e) => setChannelName(e.target.value)}
+                className="w-full bg-white/5 backdrop-blur-lg text-white px-4 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/10 transition duration-200 placeholder-gray-500 border border-white/10"
+                required
+              />
+            </div>
+            
+            <div className="relative">
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-white/5 backdrop-blur-lg text-white px-4 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/10 transition duration-200 placeholder-gray-500 border border-white/10"
+                required
+              />
+            </div>
+            
+            <div className="relative">
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-white/5 backdrop-blur-lg text-white px-4 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/10 transition duration-200 placeholder-gray-500 border border-white/10 pr-12"
+                required
+              />
+              <Eye className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 cursor-pointer" />
+            </div>
+            
+            <div className="relative">
+              <input
+                type="tel"
+                placeholder="Phone Number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full bg-white/5 backdrop-blur-lg text-white px-4 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/10 transition duration-200 placeholder-gray-500 border border-white/10"
+                required
+              />
+            </div>
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold transition duration-200 flex items-center justify-center space-x-2"
-          >
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-white/10 backdrop-blur-lg hover:bg-white/15 text-white py-4 rounded-xl font-semibold transition duration-300 flex items-center justify-center space-x-2 mt-6 disabled:opacity-50 border border-white/20 shadow-lg"
+              onClick={submitHandler}
+            >
             {isLoading ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2 className="animate-spin w-5 h-5" />
                 <span>Creating Account...</span>
               </>
             ) : (
@@ -144,16 +157,13 @@ const navigate = useNavigate();
           </button>
 
           {/* Login Link */}
-          <p className="text-center text-gray-400">
+          <p className="text-center text-gray-300 mt-6">
             Already have an account?{' '}
-            {/* <a href="/login" className="text-orange-500 hover:text-orange-400 transition duration-200">
-              Sign in
-            </a> */}
-             <Link to="/login" className="text-orange-500 hover:text-orange-400 transition duration-200">
-            Login!
-            </Link>
+            <a href="/login" className="text-purple-400 hover:text-purple-300 transition duration-200 font-medium">
+              Login!
+            </a>
           </p>
-        </form>
+        </div>
       </div>
     </div>
   );

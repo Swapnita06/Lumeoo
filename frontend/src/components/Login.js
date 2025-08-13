@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { Loader2, Lock } from 'lucide-react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const submitHandler = async (e) => {
+const navigate = useNavigate();
+   const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -26,61 +24,66 @@ const Login = () => {
       localStorage.setItem('logoUrl', res.data.logoUrl);
 
       navigate('/allvideos');
-      toast.success('Welcome to Lumeo!');
+       toast.success('Welcome to Lumeo!');
     } catch (err) {
       toast.error(err?.response?.data?.error || 'Login failed');
     } finally {
       setLoading(false);
     }
   };
-
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-purple-950 to-black flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-orange-500 mb-2">PlayZoon</h1>
-          <p className="text-gray-400">Welcome back!</p>
+          <h1 className="text-5xl font-bold text-white mb-4">PlayZoon</h1>
+          <p className="text-gray-400 text-lg">Welcome back!</p>
         </div>
 
         {/* Form */}
-        <form onSubmit={submitHandler} className="space-y-6 bg-gray-900 rounded-xl p-8 shadow-2xl">
+        <div className="space-y-6 bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl">
           {/* Logo Icon */}
           <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 rounded-full bg-gray-800 flex items-center justify-center border-4 border-orange-500">
-              <Lock className="w-8 h-8 text-orange-500" />
+            <div className="w-28 h-28 rounded-2xl bg-white/5 backdrop-blur-lg flex items-center justify-center border border-white/20 shadow-lg">
+              <Lock className="w-10 h-10 text-gray-300" />
             </div>
           </div>
 
           {/* Text Inputs */}
           <div className="space-y-4">
-            <input
-              type="email"
-              placeholder="Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-gray-800 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-200"
-              required
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-gray-800 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-200"
-              required
-            />
+            <div className="relative">
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-white/5 backdrop-blur-lg text-white px-4 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/10 transition duration-200 placeholder-gray-500 border border-white/10"
+                required
+              />
+            </div>
+            
+            <div className="relative">
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-white/5 backdrop-blur-lg text-white px-4 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/10 transition duration-200 placeholder-gray-500 border border-white/10"
+                required
+              />
+            </div>
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold transition duration-200 flex items-center justify-center space-x-2"
+            className="w-full bg-white/10 backdrop-blur-lg hover:bg-white/15 text-white py-4 rounded-xl font-semibold transition duration-300 flex items-center justify-center space-x-2 mt-6 disabled:opacity-50 border border-white/20 shadow-lg"
+            onClick={submitHandler}
           >
             {isLoading ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2 className="animate-spin w-5 h-5" />
                 <span>Signing In...</span>
               </>
             ) : (
@@ -89,13 +92,13 @@ const Login = () => {
           </button>
 
           {/* Signup Link */}
-          <p className="text-center text-gray-400">
+          <p className="text-center text-gray-500 mt-6">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-orange-500 hover:text-orange-400 transition duration-200">
+            <a href="/signup" className="text-white hover:text-gray-300 transition duration-200 font-medium">
               Create Account
-            </Link>
+            </a>
           </p>
-        </form>
+        </div>
       </div>
     </div>
   );
