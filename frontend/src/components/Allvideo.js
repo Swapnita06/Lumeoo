@@ -25,13 +25,13 @@ const AllVideos = () => {
         setIsLoading(true);
         let response;
         if (activeTab === "My Videos") {
-          response = await axios.get("http://localhost:5000/video/own-video", {
+          response = await axios.get("https://lumora-vbnl.onrender.com/video/own-video", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
         } else {
-          response = await axios.get("http://localhost:5000/video/allvideos", {
+          response = await axios.get("https://lumora-vbnl.onrender.com/video/allvideos", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -103,7 +103,7 @@ const AllVideos = () => {
           : video
       ));
 
-      await axios.put(`http://localhost:5000/video/like/${videoId}`, {}, {
+      await axios.put(`https://lumora-vbnl.onrender.comvideo/like/${videoId}`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       toast.success("Video liked!");
@@ -141,7 +141,7 @@ const AllVideos = () => {
           : video
       ));
 
-      await axios.put(`http://localhost:5000/video/dislike/${videoId}`, {}, {
+      await axios.put(`https://lumora-vbnl.onrender.com/video/dislike/${videoId}`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       toast.success("Video disliked!");

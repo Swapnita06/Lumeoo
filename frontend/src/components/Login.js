@@ -13,7 +13,7 @@ const navigate = useNavigate();
     setLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/user/login', {
+      const res = await axios.post('https://lumora-vbnl.onrender.com/user/login', {
         email,
         password,
       });

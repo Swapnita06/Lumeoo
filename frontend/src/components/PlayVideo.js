@@ -29,7 +29,7 @@ const PlayVideo = () => {
     const fetchVideoData = async () => {
       try {
         if (!video) {
-          const response = await axios.get(`http://localhost:5000/video/${videoId}`);
+          const response = await axios.get(`https://lumora-vbnl.onrender.com/video/${videoId}`);
           setVideo(response.data);
         }
       } catch (error) {
@@ -47,7 +47,7 @@ const PlayVideo = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/comments/${videoId}`);
+        const response = await axios.get(`https://lumora-vbnl.onrender.com/comments/${videoId}`);
         setComments(response.data.commentList || []);
       } catch (error) {
         console.error('Error fetching comments:', error);
@@ -74,7 +74,7 @@ const PlayVideo = () => {
     try {
       console.log('video id-:', videoId);
       const response = await axios.post(
-        `http://localhost:5000/comment/new-comment/${videoId}`,
+        `https://lumora-vbnl.onrender.com/comment/new-comment/${videoId}`,
         { commentText: newComment },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -95,7 +95,7 @@ const PlayVideo = () => {
     
     try {
       const response = await axios.put(
-        `http://localhost:5000/comments/${commentId}`,
+        `https://lumora-vbnl.onrender.com/comments/${commentId}`,
         { commentText: editCommentText },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -117,7 +117,7 @@ const PlayVideo = () => {
     
     try {
       await axios.delete(
-        `http://localhost:5000/comments/${commentId}`,
+        `https://lumora-vbnl.onrender.com/comments/${commentId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
@@ -159,7 +159,7 @@ const PlayVideo = () => {
         console.log('currentChannelId ',currentChannelId);
         
         const subResponse = await axios.get(
-          `http://localhost:5000/user/check-subscription/${currentChannelId}`,
+          `https://lumora-vbnl.onrender.com/user/check-subscription/${currentChannelId}`,
           { 
             headers: { 
               Authorization: `Bearer ${token}`,
@@ -171,7 +171,7 @@ const PlayVideo = () => {
         setIsSubscribed(subResponse.data.isSubscribed);
 
         const channelResponse = await axios.get(
-          `http://localhost:5000/user/${currentChannelId}`,
+          `https://lumora-vbnl.onrender.com/user/${currentChannelId}`,
           { 
             headers: { 
               Authorization: `Bearer ${token}`,
@@ -232,7 +232,7 @@ const PlayVideo = () => {
       console.log('Channel ID (x) is', currentChannelId);
 
       const response = await axios.put(
-        `http://localhost:5000/user/${endpoint}/${currentChannelId}`,
+        `https://lumora-vbnl.onrender.com/user/${endpoint}/${currentChannelId}`,
         {},
         {
           headers: {
@@ -293,7 +293,7 @@ const PlayVideo = () => {
 
     try {
       await axios.put(
-        `http://localhost:5000/video/${endpoint}/${video._id}`,
+        `https://lumora-vbnl.onrender.com/video/${endpoint}/${video._id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -320,7 +320,7 @@ const PlayVideo = () => {
   const handleVideoEnd = async () => {
     try {
       await axios.put(
-        `http://localhost:5000/video/views/${video._id}`,
+        `https://lumora-vbnl.onrender.com/video/views/${video._id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

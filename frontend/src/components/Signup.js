@@ -31,7 +31,7 @@ const navigate = useNavigate();
     formData.append('phone', phone);
     formData.append('logo', logo);
 
-    const res = await axios.post('http://localhost:5000/user/signup', formData, {
+    const res = await axios.post('https://lumora-vbnl.onrender.com/user/signup', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

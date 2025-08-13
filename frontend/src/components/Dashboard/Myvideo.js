@@ -15,7 +15,7 @@ const MyVideo = () => {
   }, []);
 
   const getOwnVideo = () => {
-    axios.get('http://localhost:5000/video/own-video', {
+    axios.get('https://lumora-vbnl.onrender.com/video/own-video', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       }
@@ -36,7 +36,7 @@ const MyVideo = () => {
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:5000/video/update/${currentVideo._id}`, currentVideo, {
+    axios.put(`https://lumora-vbnl.onrender.com/video/update/${currentVideo._id}`, currentVideo, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       }
@@ -64,7 +64,7 @@ const MyVideo = () => {
   const deleteVideo = (videoId) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this video?');
     if (confirmDelete) {
-      axios.delete(`http://localhost:5000/video/${videoId}`, {
+      axios.delete(`https://lumora-vbnl.onrender.com/video/${videoId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         }

@@ -81,7 +81,7 @@ const UploadVideo = () => {
     formData.append('thumbnail', thumbnail);
 
     try {
-      const response = await axios.post('http://localhost:5000/video/upload', formData, {
+      const response = await axios.post('https://lumora-vbnl.onrender.com/video/upload', formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'multipart/form-data'
