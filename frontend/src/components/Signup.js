@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Camera, Loader2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -12,7 +12,7 @@ function App() {
   const [logo, setLogo] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
   const [isLoading, setLoading] = useState(false);
-
+const navigate = useNavigate();
   const fileHandler = (e) => {
     if (e.target.files && e.target.files[0]) {
       setLogo(e.target.files[0]);
@@ -38,8 +38,9 @@ function App() {
     });
 
     // Handle successful signup
-    toast.success('Account created successfully!');
-    // Redirect to login or other page
+   toast.success('Account created successfully!', {
+  onClose: () => navigate('/login')
+});
   } catch (err) {
     toast.error(err?.response?.data?.error || 'Signup failed');
   } finally {
