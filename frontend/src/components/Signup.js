@@ -53,7 +53,7 @@ const navigate = useNavigate();
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-white mb-4">PlayZoon</h1>
+          <h1 className="text-5xl font-bold text-white mb-4">Lumora</h1>
           <p className="text-gray-400 text-lg">Create your channel today</p>
         </div>
 

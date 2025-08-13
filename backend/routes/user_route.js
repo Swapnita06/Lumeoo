@@ -220,6 +220,21 @@ Router.get('/check-subscription/:channelId', checkAuth, async (req, res) => {
         res.status(500).json({ error: 'Failed to check subscription status' });
     }
 });
+
+Router.get('/:channelId',checkAuth,async(req,res)=>{
+    try{
+ const channelId= req.params.channelId;
+ const channel = await User.findById(channelId);
+ if(!channel){
+    return res.status(404).json({error:'Channel not found'});
+ }
+ res.status(200).json(channel);
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({error:'Failed to fetch channel'});
+    }
+})
   
 
 module.exports = Router

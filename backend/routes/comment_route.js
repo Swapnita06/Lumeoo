@@ -9,9 +9,13 @@ Router.post('/new-comment/:videoId',checkAuth,async(req,res)=>{
     try{
         const verifiedUser = await jwt.verify(req.headers.authorization.split(" ")[1],'swapnita singh')
      console.log(verifiedUser)
+     const vid = req.params.videoId;
+     if(!vid){
+        return res.status(400).json({message:'Video id is required'})
+     }
      const newComment = new Comment({
         _id:new mongoose.Types.ObjectId,
-        videoId:req.params.videoId,
+        videoId:vid,
         userId:verifiedUser._id,
         commentText:req.body.commentText
      })
