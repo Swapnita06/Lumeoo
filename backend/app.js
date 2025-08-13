@@ -22,7 +22,12 @@ const connectWithdb=async()=>{
 
 connectWithdb();
 
-app.use(cors())
+app.use(cors({
+  origin: ['http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 app.use(bodyParser.json())
 app.use(fileUpload({
     useTempFiles : true,
